@@ -25,7 +25,7 @@ jobs:
       - name: Create Zip File
         run: find . -type f -name 'gradle.lockfile' -exec zip -r archive.zip {} +
       - name: Upload Dependency Zip
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: zipfile
           path: archive.zip
@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download artifact from the previous job
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: zipfile
       - name: Semgrep Scan
