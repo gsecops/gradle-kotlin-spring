@@ -21,7 +21,7 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
       - name: Build Dependency Tree
-        run: gradlew --init-script enable-locking.init.gradle.kts writeLocksForScan --write-locks --no-daemon
+        run: gradle --init-script enable-locking.init.gradle.kts writeLocksForScan --write-locks --no-daemon
       - name: Create Zip File
         run: find . -type f -name 'gradle.lockfile' -exec zip -r archive.zip {} +
       - name: Upload Dependency Zip
