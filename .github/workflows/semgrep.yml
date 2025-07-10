@@ -35,9 +35,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-      SEMGREP_REPO_DISPLAY_NAME: gsecops/gradle-kotlin-spring/lockfilecommitted1
+      SEMGREP_REPO_DISPLAY_NAME: gsecops/gradle-kotlin-spring/lockfilecommitted2
     container:
-      image: semgrep/semgrep:1.127.1
+      image: semgrep/semgrep:1.128.0
     steps:
       - uses: actions/checkout@v4
       #- name: Download artifact from the previous job
