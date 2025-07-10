@@ -11,40 +11,41 @@ on:
   - cron: 05 5 * * 1
 name: Semgrep
 jobs:
-  buildGradleLockFiles:
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-      - name: Build Dependency Tree
-        run: gradle --init-script enable-locking.init.gradle.kts writeLocksForScan --write-locks --no-daemon
-      - name: Create Zip File
-        run: find . -type f -name 'gradle.lockfile' -exec zip -r archive.zip {} +
-      - name: Upload Dependency Zip
-        uses: actions/upload-artifact@v4
-        with:
-          name: zipfile
-          path: archive.zip
+  #buildGradleLockFiles:
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #    - uses: actions/checkout@v4
+  #    - name: Set up JDK 21
+  #      uses: actions/setup-java@v3
+  #      with:
+  #        java-version: '21'
+  #        distribution: 'temurin'
+  #    - name: Build Dependency Tree
+  #      run: gradle --init-script enable-locking.init.gradle.kts writeLocksForScan --write-locks --no-daemon
+  #    - name: Create Zip File
+  #      run: find . -type f -name 'gradle.lockfile' -exec zip -r archive.zip {} +
+  #    - name: Upload Dependency Zip
+  #      uses: actions/upload-artifact@v4
+  #      with:
+  #        name: zipfile
+  #        path: archive.zip
   semgrep:
-    needs: buildGradleLockFiles
+    #needs: buildGradleLockFiles
     name: Scan
     runs-on: ubuntu-latest
     env:
       SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-      SEMGREP_REPO_DISPLAY_NAME: gsecops/gradle-kotlin-spring/lockfilecommitted
+      SEMGREP_REPO_DISPLAY_NAME: gsecops/gradle-kotlin-spring/lockfilecommitted1
     container:
-      image: semgrep/semgrep
+      image: semgrep/semgrep:1.127.1
     steps:
       - uses: actions/checkout@v4
-      - name: Download artifact from the previous job
-        uses: actions/download-artifact@v4
-        with:
-          name: zipfile
+      #- name: Download artifact from the previous job
+      #  uses: actions/download-artifact@v4
+      #  with:
+      #    name: zipfile
       - name: Semgrep Scan
         run: |
-          unzip -o archive.zip
-          semgrep ci --supply-chain
+          apk add openjdk21
+          apk add maven
+          semgrep ci --supply-chain --allow-local-builds
